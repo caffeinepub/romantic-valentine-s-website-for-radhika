@@ -1,0 +1,10 @@
+{
+  "frontend/src/App.tsx": "Main application component with romantic gradient background, orchestrating the romantic Valentine's experience with floating hearts, celebration effects, and smiling emoji animations within a fully scrollable vertical layout using native browser scrolling.",
+  "frontend/src/components/FloatingHearts.tsx": "Component that renders 20 animated floating hearts with varied opacity and animation timings for depth effect.",
+  "frontend/src/components/ValentineCard.tsx": "Interactive Valentine's card component with \"Yes/No\" buttons, dynamic \"No\" button evasion behavior, celebration display with the kissing couple image, mobile-optimized layout, and \"Radhika\" text prominently displayed between two pink heart images in a horizontal line.",
+  "frontend/src/index.css": "Global styles with romantic OKLCH color system, custom keyframes for floating hearts, celebration hearts, heartbeat, glow, scale effects, emoji bounce animation, plus mobile viewport handling, native smooth scrolling behavior, and touch manipulation utilities for enhanced mobile experience.",
+  "frontend/src/hooks/useQueries.ts": "Minimal placeholder file as the application is frontend-only with no backend data requirements.",
+  "frontend/src/components/Fireworks.tsx": "Fireworks animation component that creates skyshot-style burst effects with multiple particles radiating outward at random positions across the screen when the user clicks \"Yes\".",
+  "frontend/src/components/CelebrationHearts.tsx": "Celebration hearts component generating 30 hearts that rise from the bottom with varied timings when the user clicks \"Yes\".",
+  "frontend/src/components/SmilingEmojiAnimation.tsx": "Celebration animation component that displays multiple smiling emojis bouncing up from the bottom of the screen with varied timings and rotations when the user clicks \"Yes\"."
+}
