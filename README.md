@@ -1,2 +1,3 @@
-# romantic-valentine-s-website-for-radhika
-Exported from Caffeine project: Romantic Valentine's Website for Radhika
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

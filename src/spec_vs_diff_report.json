@@ -1,0 +1,28 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T13:07:27.285Z",
+  "summary": "BuildRequest contains no requirements or acceptance criteria. The diff adds a blob-storage mixin to the Motoko backend and updates project_state.json metadata, which are not requested by any stated requirement.",
+  "missing_requirements": [],
+  "hallucinated_features": [
+    {
+      "description": "Added blob storage mixin integration in the Motoko backend actor via `include MixinStorage()`.",
+      "reason": "No requirements were provided in the BuildRequest, so adding backend storage functionality is not traceable to any requested change.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Updated/maintained project metadata describing features (project_state.json changes).",
+      "reason": "No requirements were provided; changes to project state/feature catalog are not requested deliverables.",
+      "evidence": [
+        "project_state.json"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "backend/main.mo",
+    "project_state.json"
+  ]
+}

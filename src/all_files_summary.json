@@ -1,0 +1,23 @@
+{
+  "backend/main.mo": "Motoko actor importing and including a blob‑storage mixin with no extra logic.",
+  "feature_evidence.json": "Empty feature evidence report stub.",
+  "frontend-file-summaries.txt": "Text file containing human‑written summaries of all frontend source files.",
+  "frontend/index.css": "Tailwind base and theme variable definitions for light/dark modes with global styling.",
+  "frontend/index.html": "HTML entry point mounting the React app and loading main.tsx.",
+  "frontend/src/App.tsx": "Main React app routing between Valentine experience and tool page with animations and name personalization.",
+  "frontend/src/components/CelebrationHearts.tsx": "Generates 30 upward‑rising celebration hearts that auto‑clear after animation.",
+  "frontend/src/components/Fireworks.tsx": "Empty component file placeholder.",
+  "frontend/src/components/FloatingHearts.tsx": "Creates 20 endlessly floating hearts with random size, opacity, and timing.",
+  "frontend/src/components/SmilingEmojiAnimation.tsx": "Shows bouncing smiling emojis on celebration trigger and removes them after animation.",
+  "frontend/src/components/ValentineCard.tsx": "Interactive Valentine card with evasive “No” button, celebratory “Yes” response, and personalized text.",
+  "frontend/src/hooks/useActor.ts": "Hook that creates and refreshes a backend actor using Internet Identity and react‑query.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Full Internet Identity provider and hook managing login, identity loading, and state.",
+  "frontend/src/hooks/useQueries.ts": "Placeholder file exporting nothing, indicating no backend queries are needed.",
+  "frontend/src/index.css": "Tailwind base styles, theme variables, and numerous custom keyframe animations for the Valentine UI.",
+  "frontend/src/main.tsx": "Sets up React root with react-query and the InternetIdentityProvider, then renders the App.",
+  "frontend/src/pages/WishlinkToolPage.tsx": "UI page for generating personalized shareable Valentine links with name input and copy-to-clipboard.",
+  "frontend/src/utils/personalization.ts": "Utility functions to normalize recipient names, parse them from URLs, and build shareable personalized links.",
+  "frontend/src/utils/routing.ts": "Logic to detect the /tool route, navigate between main and tool pages, and build clean base URLs.",
+  "frontend/tailwind.config.js": "Tailwind configuration enabling dark mode, custom OKLCH color variables, extended animations, and plugins.",
+  "project_state.json": "Metadata describing project structure, architecture notes, known issues, and features of the Valentine microsite."
+}

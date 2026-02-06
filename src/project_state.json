@@ -1,0 +1,327 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 30,
+  "summary": "A React + TypeScript single-page \"Valentine's\" microsite that now also needs a follower-facing \"wishlink\" tool: users can generate/share a clean, mobile-compatible link that personalizes the site by swapping the displayed girlfriend/crush name (e.g., replacing \"Guddi\") while keeping all other visuals and behaviors unchanged.",
+  "architectural_notes": [
+    "Frontend is a Vite-style React SPA (ReactDOM.createRoot) using TypeScript and component-level local state (no backend queries required for the main UX).",
+    "Styling uses TailwindCSS with OKLCH-based CSS variables and dark mode via the `class` strategy; custom keyframes/utilities drive animations (float, heartbeat, glow, scale-in, shimmer, emoji bounce).",
+    "Animations are implemented as fixed-position overlay components (FloatingHearts, CelebrationHearts, SmilingEmojiAnimation) layered via z-index and `pointer-events: none`.",
+    "Interactive UI behavior is encapsulated in `ValentineCard` using refs + DOM measurements to reposition the \"No\" button within container bounds.",
+    "Authentication is implemented as a React Context provider (`InternetIdentityProvider`) wrapping the app; it uses `@dfinity/auth-client` and ICP SDK identities, with delegation validity checks.",
+    "Canister actor instantiation is wrapped by a `useActor` hook using `@tanstack/react-query` caching keyed by principal, with global invalidation/refetch of dependent queries when identity/actor changes.",
+    "Backend code is Motoko with a modular design: a `Storage` module for state/authorization/cycle top-up utilities and a `Mixin` providing shared/query methods intended to be mixed into a canister.",
+    "Runtime configuration was centralized via a dedicated frontend config module (e.g., `frontend/src/config.ts`) rather than ad-hoc environment access in hooks.",
+    "A `build-template/` scaffold was added to support reproducible packaging/deployment (ICP canister YAML, deploy scripts, and a preconfigured shadcn/ui-based frontend template).",
+    "Frontend now includes generated/typed backend canister declarations (`declarations/*.did.*`) and a small `StorageClient` helper to encapsulate blob-storage interactions via the actor hook."
+  ],
+  "known_issues": [
+    "Two different `index.css` files exist (`frontend/src/index.css` and `frontend/index.css`) with different variable sets; depending on build configuration this may cause confusion or unused/incorrect styling if the wrong file is bundled.",
+    "Tool route is not opening: navigating to the intended Create Link page (e.g., `/#/tool` or `/tool`) redirects back to the main Valentine front page, indicating a routing configuration/route registration issue (hash vs browser routing or missing route).",
+    "Confirmed in production that navigating to the tool hash route still redirects to the front page (example failing URL: https://hass-matt-pagli-pyaar-ho-jayega-ag-cdv.caffeine.xyz/#/tool), indicating the router/hosting still isn’t serving or recognizing the /#/tool route as intended.",
+    "After deploying v26, the Create Link (/ #/tool) page still does not load for the user (tool route issue persists)."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Romantic Valentine landing page layout",
+      "synonyms": [
+        "Valentine microsite",
+        "Romantic single-page experience"
+      ],
+      "description": "Renders a full-screen, scrollable layout with a fixed romantic gradient background image, centered main content area, fade-in entrance, and a footer credit line.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Floating hearts ambient background animation",
+      "synonyms": [
+        "FloatingHearts",
+        "Ambient hearts overlay"
+      ],
+      "description": "Displays an always-on overlay of randomly sized/positioned hearts that continuously float upward with varying opacity, duration, and delays to create depth.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "Interactive Valentine card with evasive \"No\" button",
+      "synonyms": [
+        "ValentineCard",
+        "No button escape"
+      ],
+      "description": "Shows a Valentine proposal card addressed to \"Radhika\". Clicking \"No\" cycles through playful messages and moves the button to a new random position within calculated container bounds using DOM measurements via refs.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "\"Yes\" acceptance flow with response screen",
+      "synonyms": [
+        "Acceptance screen",
+        "Yay screen"
+      ],
+      "description": "Clicking \"Yes\" transitions the card into a celebratory response state (\"Yay!\" message). When celebration is enabled it displays a kissing-couple image instead of the default heart icon.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Celebration hearts burst overlay",
+      "synonyms": [
+        "CelebrationHearts",
+        "Rising hearts animation"
+      ],
+      "description": "On celebration, spawns a set of hearts that rise from the bottom with randomized sizes/timing and clears them after the animation completes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Smiling emoji celebration overlay",
+      "synonyms": [
+        "SmilingEmojiAnimation",
+        "Emoji bounce"
+      ],
+      "description": "On celebration, spawns multiple smiley emoji images that bounce upward with randomized x-positions and delays, then clears after completion.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "TailwindCSS theming, dark mode, and custom animation utilities",
+      "synonyms": [
+        "OKLCH theme tokens",
+        "Tailwind animations"
+      ],
+      "description": "Defines OKLCH CSS variable-based color tokens for light/dark modes, Tailwind config extensions, and custom keyframes/utilities for heartbeat, glow, scale-in, shimmer, float-up, celebration-rise, and emoji-bounce; includes mobile/touch interaction tweaks.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Internet Identity authentication context",
+      "synonyms": [
+        "InternetIdentityProvider",
+        "II login"
+      ],
+      "description": "Provides a React Context with `login`, `clear`, and identity state. Initializes an `AuthClient`, loads stored identity on mount, performs login via Internet Identity with long TTL delegation, and supports logout/error states.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "ICP canister actor creation hook with React Query caching",
+      "synonyms": [
+        "useActor",
+        "Actor hook"
+      ],
+      "description": "Creates an anonymous or authenticated canister actor depending on the current identity, caches it via React Query keyed by principal, and invalidates/refetches non-actor queries when the actor changes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-10",
+      "title": "Motoko blob-storage authorization and maintenance utilities (module + mixin)",
+      "synonyms": [
+        "Storage.mo",
+        "Mixin.mo",
+        "Gateway principal authorization",
+        "Cycle refill"
+      ],
+      "description": "Implements Motoko utilities for maintaining a list of authorized gateway principals (fetched from a cashier canister), authorization checks, cycle top-up of the cashier using available cycles, storage blob liveness query, listing/pruning dead blobs with an explicit GC trigger, and returning an upload certificate payload.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-11",
+      "title": "Local-only query placeholder",
+      "synonyms": [
+        "useQueries placeholder"
+      ],
+      "description": "Includes a minimal `useQueries.ts` that exports nothing, documenting that the app primarily manages state locally and does not require backend queries for core functionality.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-12",
+      "title": "Fireworks celebration overlay animation",
+      "synonyms": [
+        "Fireworks",
+        "Celebration fireworks"
+      ],
+      "description": "Adds a fireworks-style overlay component used during the \"Yes\" celebration flow to enhance the celebratory visuals.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-13",
+      "title": "Exportable build/deploy template with GitHub/ICP deployment support",
+      "synonyms": [
+        "Build template",
+        "Deploy scripts",
+        "GitHub export"
+      ],
+      "description": "Includes a reusable build-template (frontend + backend canister YAML, env/config scaffolding, shadcn/ui component set, and deploy scripts/icp.yaml) to package and deploy the project via GitHub-based workflows and ICP tooling.",
+      "reqIds": [
+        "AR-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-14",
+      "title": "Frontend typed backend bindings and StorageClient utility",
+      "synonyms": [
+        "backend.did declarations",
+        "StorageClient",
+        "backend.ts wiring"
+      ],
+      "description": "Adds generated/checked TypeScript bindings for the backend canister (DID declarations) plus a small frontend client utility to interact with blob-storage-related backend methods through the existing actor/auth setup.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-15",
+      "title": "Build-template maintenance tooling (Docker + image optimization scripts + custom lint rules)",
+      "synonyms": [
+        "build-template Dockerfile",
+        "resize/prune images scripts",
+        "custom ESLint rules"
+      ],
+      "description": "Extends the exportable build-template with a Dockerfile, scripts to resize/prune unused images, and custom ESLint rules to enforce project conventions (e.g., avoiding BigInt in query keys and requiring the InternetIdentityProvider wrapper).",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-follower-facing-wishlink-tool-page-that-lets-a-user-enter-their-girlfriend-crush-name-and-generates-a-shareable-link-to-this-same-valentine-site-with-the-entered-name-embedded-in-the-url",
+      "title": "Implement a follower-facing “wishlink” tool page that lets a user enter their girlfriend/crush name and generates a shareable link to this same Valentine site with the entered name embedded in the URL.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-valentine-page-to-dynamically-replace-the-displayed-name-guddi-with-the-name-provided-in-the-wishlink-url-parameter-while-keeping-all-other-visuals-wording-besides-the-name-animations-styling-and-behaviors-unchanged",
+      "title": "Update the Valentine page to dynamically replace the displayed name “Guddi” with the name provided in the wishlink URL parameter, while keeping all other visuals, wording (besides the name), animations, styling, and behaviors unchanged.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-document-title-html-page-title-reflect-the-personalized-name-when-a-wishlink-parameter-is-present-and-default-to-the-current-guddi-title-when-not-present",
+      "title": "Make the document title (HTML page title) reflect the personalized name when a wishlink parameter is present, and default to the current Guddi title when not present.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-wishlink-tool-and-the-personalized-valentine-page-experience-are-clean-and-mobile-compatible",
+      "title": "Ensure the wishlink tool and the personalized Valentine page experience are clean and mobile-compatible.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-in-valentine-page-create-link-create-your-link-entry-point-so-that-recipients-opening-a-personalized-shareable-valentine-link-only-see-the-valentine-experience-all-existing-visuals-wording-animations-and-behaviors-must-remain-unchanged-aside-from-removing-this-option",
+      "title": "Remove the in-Valentine-page \"Create Link\" / \"Create Your Link\" entry point so that recipients opening a personalized/shareable Valentine link only see the Valentine experience (all existing visuals, wording, animations, and behaviors must remain unchanged aside from removing this option).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-wishlink-generator-accessible-only-via-a-dedicated-separate-page-route-e-g-a-hash-route-like-tool-or-an-equivalent-spa-route-and-keep-the-existing-wishlinktoolpage-ui-behavior-intact",
+      "title": "Make the wishlink generator accessible only via a dedicated, separate page/route (e.g., a hash route like `/#/tool` or an equivalent SPA route) and keep the existing WishlinkToolPage UI/behavior intact.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-generated-shareable-url-from-the-wishlink-tool-always-points-to-the-main-valentine-experience-not-the-tool-route-and-includes-only-the-recipient-name-personalization-parameter-when-provided",
+      "title": "Ensure the generated shareable URL from the wishlink tool always points to the main Valentine experience (not the tool route) and includes only the recipient name personalization parameter when provided.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-spa-route-detection-so-the-wishlink-tool-page-reliably-opens-when-the-url-is-intended-to-navigate-to-the-tool-including-when-the-hash-contains-extra-caffeine-admin-token-fragments-e-g-caffeineadmintoken-site-root-tool-or-when-the-hash-includes-additional-query-parameters",
+      "title": "Fix the SPA route detection so the Wishlink tool page reliably opens when the URL is intended to navigate to the tool, including when the hash contains extra Caffeine admin-token fragments (e.g., `#caffeineAdminToken=.../site-root/tool`) or when the hash includes additional query parameters.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-generated-shareable-url-from-the-wishlink-tool-always-points-to-the-main-valentine-experience-not-the-tool-page-even-if-the-user-is-currently-on-a-tool-route-that-uses-a-pathname-like-tool-or-includes-a-base-path-like-site-root",
+      "title": "Ensure the generated shareable URL from the Wishlink tool always points to the main Valentine experience (not the tool page) even if the user is currently on a tool route that uses a pathname like `/tool` or includes a base path like `/site-root/`.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-tool-page-back-navigation-to-return-to-the-main-valentine-experience-correctly-for-the-supported-routing-modes-hash-route-and-or-pathname-route-without-leaving-the-user-on-an-invalid-url-that-triggers-a-redirect-to-the-front-page-unexpectedly",
+      "title": "Update the tool-page back navigation to return to the main Valentine experience correctly for the supported routing modes (hash route and/or pathname route), without leaving the user on an invalid URL that triggers a redirect to the front page unexpectedly.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-spa-routing-so-opening-the-exact-production-url-https-hass-matt-pagli-pyaar-ho-jayega-ag-cdv-caffeine-xyz-tool-renders-the-wishlinktoolpage-instead-of-redirecting-to-the-main-valentine-front-page",
+      "title": "Fix SPA routing so opening the exact production URL `https://hass-matt-pagli-pyaar-ho-jayega-ag-cdv.caffeine.xyz/#/tool` renders the WishlinkToolPage instead of redirecting to the main Valentine front page.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-harden-tool-route-detection-to-handle-caffeine-specific-hash-formats-and-fragments-so-that-the-tool-page-opens-whenever-the-url-intends-to-navigate-to-the-tool-including-hashes-that-contain-other-fragments-plus-a-tool-segment",
+      "title": "Harden tool-route detection to handle Caffeine-specific hash formats and fragments so that the tool page opens whenever the URL intends to navigate to the tool (including hashes that contain other fragments plus a `/tool` segment).",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-spa-route-detection-so-the-wishlinktoolpage-renders-whenever-the-url-intends-to-navigate-to-the-tool-page-including-hash-routes-that-include-a-base-path-e-g-site-root-tool-additional-query-parameters-e-g-tool-x-1-or-caffeine-specific-hash-fragments-that-include-other-tokens-plus-a-tool-segment",
+      "title": "Fix SPA route detection so the WishlinkToolPage renders whenever the URL intends to navigate to the tool page, including hash routes that include a base path (e.g., `/#/site-root/tool`), additional query parameters (e.g., `/#/tool?x=1`), or Caffeine-specific hash fragments that include other tokens plus a `/tool` segment.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-navigation-away-from-the-tool-page-returns-to-the-main-valentine-experience-without-leaving-an-invalid-url-supporting-both-hash-based-tool-routing-and-any-pathname-based-tool-routing-already-handled",
+      "title": "Ensure navigation away from the tool page returns to the main Valentine experience without leaving an invalid URL (supporting both hash-based tool routing and any pathname-based tool routing already handled).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-2",
+      "summary": "Add a follower-facing wishlink/tool to generate a shareable link that personalizes the Valentine page by replacing the displayed name (e.g., Guddi) with the user's provided girlfriend/crush name, keeping the rest of the site unchanged and ensuring a clean, mobile-compatible experience.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Move the \"create link\" (wishlink generator) UI off the shareable Valentine page and into a separate dedicated page/route, so recipients only see the Valentine experience; keep all other visuals/behaviors unchanged.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Romantic Valentine's Website for Radhika",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

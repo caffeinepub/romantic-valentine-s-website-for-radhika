@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
-import { Heart, Sparkles } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { getDefaultName } from '@/utils/personalization';
 
 interface ValentineCardProps {
   onYesClick: () => void;
   showCelebration: boolean;
+  recipientName?: string;
 }
 
-export default function ValentineCard({ onYesClick, showCelebration }: ValentineCardProps) {
+export default function ValentineCard({ onYesClick, showCelebration, recipientName = getDefaultName() }: ValentineCardProps) {
   const [showResponse, setShowResponse] = useState(false);
   const [noClickCount, setNoClickCount] = useState(0);
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
@@ -88,8 +90,6 @@ export default function ValentineCard({ onYesClick, showCelebration }: Valentine
               ) : (
                 <>
                   <Heart className="h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 text-rose-500 fill-rose-500 animate-heartbeat" />
-                  <Sparkles className="h-7 w-7 sm:h-9 sm:w-9 md:h-10 md:w-10 text-yellow-400 absolute -top-2 -right-2 animate-spin-slow" />
-                  <Sparkles className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-yellow-400 absolute -bottom-2 -left-2 animate-spin-slow" style={{ animationDelay: '0.5s' }} />
                 </>
               )}
             </div>
@@ -102,8 +102,8 @@ export default function ValentineCard({ onYesClick, showCelebration }: Valentine
             <p className="text-2xl sm:text-3xl md:text-4xl text-rose-600 dark:text-rose-400 font-semibold">
               I knew you'd say yes!
             </p>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-lg mx-auto leading-relaxed px-4">
-              You've made me the happiest person alive, Radhika. 
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-lg mx-auto leading-relaxed px-4 break-words">
+              You've made me the happiest person alive, {recipientName}. 
               This Valentine's Day is going to be absolutely magical with you! ✨
             </p>
           </div>
@@ -132,15 +132,15 @@ export default function ValentineCard({ onYesClick, showCelebration }: Valentine
       </div>
 
       <CardContent className="p-6 sm:p-10 md:p-14 text-center space-y-6 sm:space-y-8 md:space-y-10 relative z-10">
-        {/* Header with Radhika text centered between pink hearts */}
+        {/* Header with recipient name centered between pink hearts */}
         <div className="flex justify-center items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           <img 
             src="/assets/generated/pink-heart-left.dim_80x80.png" 
             alt="" 
             className="h-10 w-10 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 animate-pulse flex-shrink-0"
           />
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent animate-glow whitespace-nowrap">
-            Radhika
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent animate-glow break-words max-w-full px-2">
+            {recipientName}
           </h1>
           <img 
             src="/assets/generated/pink-heart-left.dim_80x80.png" 
@@ -195,11 +195,33 @@ export default function ValentineCard({ onYesClick, showCelebration }: Valentine
           </div>
         </div>
 
-        {/* Decorative elements */}
-        <div className="flex justify-center gap-3 sm:gap-4 pt-4 sm:pt-6">
-          <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-yellow-400 animate-pulse" />
-          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-pink-400 animate-pulse" style={{ animationDelay: '0.3s' }} />
-          <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-purple-400 animate-pulse" style={{ animationDelay: '0.6s' }} />
+        {/* Romantic quote - repositioned lower for cleaner and more elegant appearance */}
+        <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-28 pb-4">
+          <p className="text-base sm:text-lg md:text-xl text-pink-400 dark:text-pink-300 italic font-medium max-w-lg mx-auto px-4 leading-relaxed">
+            "Every moment with you feels like a dream come true..."
+          </p>
+          
+          {/* Three decorative stars below the quote */}
+          <div className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 mt-4 sm:mt-5 md:mt-6">
+            <span 
+              className="text-2xl sm:text-3xl md:text-4xl text-pink-400 dark:text-pink-300 animate-shimmer"
+              style={{ animationDelay: '0s' }}
+            >
+              ✨
+            </span>
+            <span 
+              className="text-2xl sm:text-3xl md:text-4xl text-pink-400 dark:text-pink-300 animate-shimmer"
+              style={{ animationDelay: '0.3s' }}
+            >
+              ✨
+            </span>
+            <span 
+              className="text-2xl sm:text-3xl md:text-4xl text-pink-400 dark:text-pink-300 animate-shimmer"
+              style={{ animationDelay: '0.6s' }}
+            >
+              ✨
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>
