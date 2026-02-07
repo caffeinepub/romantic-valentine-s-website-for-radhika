@@ -3,8 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Copy, Check, Heart, ArrowLeft } from 'lucide-react';
+import { Copy, Check, Heart, ArrowLeft, Link2 } from 'lucide-react';
 import { buildShareableURL, normalizeRecipientName } from '@/utils/personalization';
+import { buildToolSpecialAccessLinkURL } from '@/utils/routing';
+import { Separator } from '@/components/ui/separator';
+import FloatingHearts from '@/components/FloatingHearts';
 
 interface WishlinkToolPageProps {
   onBack: () => void;
@@ -13,10 +16,13 @@ interface WishlinkToolPageProps {
 export default function WishlinkToolPage({ onBack }: WishlinkToolPageProps) {
   const [recipientName, setRecipientName] = useState('');
   const [copied, setCopied] = useState(false);
+  const [toolLinkCopied, setToolLinkCopied] = useState(false);
 
   const generatedURL = recipientName.trim() 
     ? buildShareableURL(recipientName) 
     : '';
+
+  const toolAccessLink = buildToolSpecialAccessLinkURL();
 
   const handleCopy = async () => {
     if (!generatedURL) return;
@@ -27,6 +33,16 @@ export default function WishlinkToolPage({ onBack }: WishlinkToolPageProps) {
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleCopyToolLink = async () => {
+    try {
+      await navigator.clipboard.writeText(toolAccessLink);
+      setToolLinkCopied(true);
+      setTimeout(() => setToolLinkCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy tool link:', err);
     }
   };
 
@@ -41,6 +57,9 @@ export default function WishlinkToolPage({ onBack }: WishlinkToolPageProps) {
           backgroundImage: 'url(/assets/generated/romantic-gradient-bg.dim_1920x1080.png)',
         }}
       />
+
+      {/* Floating hearts animation - fixed */}
+      <FloatingHearts />
 
       {/* Main content */}
       <main className="relative z-10 flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8 py-12 sm:py-16 md:py-20">
@@ -69,6 +88,52 @@ export default function WishlinkToolPage({ onBack }: WishlinkToolPageProps) {
           </CardHeader>
 
           <CardContent className="space-y-6 sm:space-y-8 p-6 sm:p-8">
+            {/* Tool Access Link Section */}
+            <div className="space-y-3 sm:space-y-4 p-4 sm:p-5 bg-purple-50 dark:bg-purple-950/30 border-2 border-purple-200 dark:border-purple-800 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Link2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <Label 
+                  htmlFor="tool-access-link" 
+                  className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Tool Page Access Link
+                </Label>
+              </div>
+              
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Share this link to give others direct access to this tool page:
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                <Input
+                  id="tool-access-link"
+                  type="text"
+                  value={toolAccessLink}
+                  readOnly
+                  className="flex-1 text-sm sm:text-base py-4 sm:py-5 px-3 sm:px-4 bg-white dark:bg-gray-900 border-2 border-purple-300 dark:border-purple-700 rounded-lg font-mono"
+                />
+                <Button
+                  onClick={handleCopyToolLink}
+                  variant="outline"
+                  className="border-2 border-purple-300 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900 text-purple-700 dark:text-purple-300 font-semibold py-4 sm:py-5 px-4 sm:px-6 text-base touch-manipulation w-full sm:w-auto"
+                >
+                  {toolLinkCopied ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
             {/* Name input section */}
             <div className="space-y-3 sm:space-y-4">
               <Label 
@@ -87,7 +152,7 @@ export default function WishlinkToolPage({ onBack }: WishlinkToolPageProps) {
                 maxLength={50}
               />
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                This name will replace "Guddi" throughout the Valentine's message.
+                This name will replace "Her Name" throughout the Valentine's message.
               </p>
             </div>
 

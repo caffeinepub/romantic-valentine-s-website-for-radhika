@@ -4,7 +4,7 @@
 
 import { getMainExperienceBaseURL } from './routing';
 
-const DEFAULT_NAME = 'Guddi';
+const DEFAULT_NAME = 'Her Name';
 const MAX_NAME_LENGTH = 50;
 
 /**
@@ -43,6 +43,31 @@ export function getRecipientNameFromURL(): string {
   }
   
   return normalizeRecipientName(name);
+}
+
+/**
+ * Checks if the current URL contains a recipient name parameter.
+ * Returns true if a name parameter exists in either standard query (?name=) or hash query (#/?name=).
+ */
+export function hasRecipientNameParamInURL(): boolean {
+  // Check standard query parameters
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.has('name')) {
+    return true;
+  }
+  
+  // Check hash-based query parameters
+  if (window.location.hash) {
+    const hashParts = window.location.hash.split('?');
+    if (hashParts.length > 1) {
+      const hashParams = new URLSearchParams(hashParts[1]);
+      if (hashParams.has('name')) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
 }
 
 /**

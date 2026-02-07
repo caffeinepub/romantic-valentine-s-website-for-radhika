@@ -1,4 +1,45 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-trigger-an-additional-smile-upward-animation-effect-when-the-user-clicks-the-yes-of-course-button-on-the-valentine-card-without-removing-or-changing-the-existing-celebration-effects-e-g-hearts-burst-and-the-current-smiling-emoji-celebration-overlay",
+      "featureTitle": "Trigger an additional “smile upward” animation effect when the user clicks the \"Yes! Of course! 💕\" button on the Valentine card, without removing or changing the existing celebration effects (e.g., hearts burst and the current smiling-emoji celebration overlay).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/UpwardSmileAnimation.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-29"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-fixed-main-valentine-experience-cta-button-text-from-make-your-own-to-exactly-make-your-own-while-keeping-its-navigation-behavior-and-conditional-visibility-rules-unchanged",
+      "featureTitle": "Update the fixed main Valentine experience CTA button text from \"Make your own 💗\" to exactly \"Make your own 🔗😁\" while keeping its navigation behavior and conditional visibility rules unchanged.",
+      "files": [
+        "frontend/src/components/MakeYourOwnCTA.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-30"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

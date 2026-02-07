@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 30,
-  "summary": "A React + TypeScript single-page \"Valentine's\" microsite that now also needs a follower-facing \"wishlink\" tool: users can generate/share a clean, mobile-compatible link that personalizes the site by swapping the displayed girlfriend/crush name (e.g., replacing \"Guddi\") while keeping all other visuals and behaviors unchanged.",
+  "projectStateVersion": 44,
+  "summary": "A React + TypeScript single-page \"Valentine's\" microsite with a follower-facing \"wishlink\" tool: users can generate/share a clean, mobile-compatible link that personalizes the site by swapping the displayed girlfriend/crush name (default: \"Radhika\") while keeping all other visuals and behaviors unchanged, and includes a main-page CTA link labeled \"make your own 💗\" that redirects to the tool page.",
   "architectural_notes": [
     "Frontend is a Vite-style React SPA (ReactDOM.createRoot) using TypeScript and component-level local state (no backend queries required for the main UX).",
     "Styling uses TailwindCSS with OKLCH-based CSS variables and dark mode via the `class` strategy; custom keyframes/utilities drive animations (float, heartbeat, glow, scale-in, shimmer, emoji bounce).",
@@ -20,7 +20,7 @@
     "Confirmed in production that navigating to the tool hash route still redirects to the front page (example failing URL: https://hass-matt-pagli-pyaar-ho-jayega-ag-cdv.caffeine.xyz/#/tool), indicating the router/hosting still isn’t serving or recognizing the /#/tool route as intended.",
     "After deploying v26, the Create Link (/ #/tool) page still does not load for the user (tool route issue persists)."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "IF-1",
@@ -304,6 +304,134 @@
         "REQ-14"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-utility-that-generates-a-special-access-link-url-that-reliably-opens-the-wishlinktoolpage-including-when-the-app-is-deployed-under-a-base-path-and-or-when-the-current-url-uses-the-caffeine-specific-hash-format-with-caffeineadmintoken-fragments",
+      "title": "Add a utility that generates a \"special access link\" URL that reliably opens the WishlinkToolPage, including when the app is deployed under a base path and/or when the current URL uses the Caffeine-specific hash format with `caffeineAdminToken` fragments.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expose-the-generated-special-access-link-in-the-wishlinktoolpage-ui-with-a-copy-to-clipboard-action-using-english-user-facing-text",
+      "title": "Expose the generated special access link in the WishlinkToolPage UI with a copy-to-clipboard action, using English user-facing text.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-small-unobtrusive-ui-control-on-the-main-valentine-experience-non-tool-route-that-lets-a-user-copy-the-tool-page-special-access-link-the-same-url-produced-by-buildtoolspecialaccesslinkurl-but-only-render-this-control-when-the-current-url-contains-a-caffeineadmintoken-hash-fragment-so-recipients-do-not-see-it-by-default",
+      "title": "Add a small, unobtrusive UI control on the main Valentine experience (non-tool route) that lets a user copy the tool-page “special access link” (the same URL produced by `buildToolSpecialAccessLinkURL()`), but only render this control when the current URL contains a `caffeineAdminToken` hash fragment so recipients do not see it by default.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-ambient-floating-hearts-background-animation-is-visible-across-the-entire-site-experience-including-the-wishlinktoolpage-route-without-changing-any-other-existing-visuals-copy-except-where-explicitly-requested-animations-or-behaviors",
+      "title": "Ensure the ambient floating hearts background animation is visible across the entire site experience, including the WishlinkToolPage route, without changing any other existing visuals, copy (except where explicitly requested), animations, or behaviors.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-visible-entry-point-on-the-main-valentine-experience-non-tool-route-with-the-exact-user-facing-text-make-your-own-that-when-clicked-tapped-automatically-navigates-the-user-to-the-wishlink-tool-page-route",
+      "title": "Add a user-visible entry point on the main Valentine experience (non-tool route) with the exact user-facing text \"Make your own 💗\" that, when clicked/tapped, automatically navigates the user to the Wishlink tool page route.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-displayed-recipient-name-is-personalized-everywhere-it-appears-on-the-valentine-experience-by-replacing-the-default-name-guddi-with-the-name-provided-via-the-existing-personalization-url-parameter-while-keeping-all-other-wording-and-behaviors-unchanged",
+      "title": "Ensure the displayed recipient name is personalized everywhere it appears on the Valentine experience by replacing the default name \"Guddi\" with the name provided via the existing personalization URL parameter, while keeping all other wording and behaviors unchanged.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-site-wide-default-recipient-name-string-guddi-with-radhika-so-that-when-no-personalization-url-parameter-is-provided-the-valentine-experience-displays-radhika-everywhere-the-default-name-is-used",
+      "title": "Replace the site-wide default recipient name string \"Guddi\" with \"Radhika\" so that when no personalization URL parameter is provided, the Valentine experience displays \"Radhika\" everywhere the default name is used.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-any-user-facing-help-text-that-explicitly-mentions-guddi-as-the-replaced-name-e-g-on-the-wishlink-tool-page-to-instead-mention-radhika-keeping-all-other-wording-unchanged",
+      "title": "Update any user-facing/help text that explicitly mentions \"Guddi\" as the replaced name (e.g., on the Wishlink tool page) to instead mention \"Radhika\", keeping all other wording unchanged.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-default-html-document-title-in-frontend-index-html-so-that-before-react-hydration-it-uses-radhika-instead-of-guddi-keep-the-existing-dynamic-runtime-title-behavior-unchanged",
+      "title": "Update the default HTML document title in `frontend/index.html` so that, before React hydration, it uses \"Radhika\" instead of \"Guddi\"; keep the existing dynamic runtime title behavior unchanged.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-floating-hearts-background-animation-is-visible-on-the-main-front-valentine-experience-non-tool-route-behind-the-content-and-does-not-interfere-with-clicking-tapping-ui-elements-do-not-change-any-other-visuals-animations-or-behaviors",
+      "title": "Ensure the floating hearts background animation is visible on the main/front Valentine experience (non-tool route) behind the content and does not interfere with clicking/tapping UI elements; do not change any other visuals, animations, or behaviors.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-site-wide-default-recipient-name-string-radhika-with-the-literal-text-her-name-so-that-when-no-personalization-url-parameter-is-provided-the-valentine-experience-displays-her-name-everywhere-the-default-name-is-used",
+      "title": "Replace the site-wide default recipient name string \"Radhika\" with the literal text \"Her Name\" so that when no personalization URL parameter is provided, the Valentine experience displays \"Her Name\" everywhere the default name is used.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-any-user-facing-help-text-that-explicitly-mentions-radhika-as-the-replaced-name-e-g-on-the-wishlink-tool-page-to-instead-mention-her-name-keeping-all-other-wording-unchanged",
+      "title": "Update any user-facing/help text that explicitly mentions \"Radhika\" as the replaced name (e.g., on the Wishlink tool page) to instead mention \"Her Name\", keeping all other wording unchanged.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-default-html-document-title-in-frontend-index-html-so-that-before-react-hydration-it-uses-her-name-instead-of-radhika-keep-the-existing-runtime-dynamic-title-behavior-unchanged",
+      "title": "Update the default HTML document title in `frontend/index.html` so that, before React hydration, it uses \"Her Name\" instead of \"Radhika\"; keep the existing runtime/dynamic title behavior unchanged.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-main-valentine-experience-non-tool-route-hide-the-fixed-position-cta-button-with-text-make-your-own-whenever-the-page-is-opened-via-a-personalized-shareable-link-that-includes-the-recipient-name-personalization-url-parameter-name-the-cta-must-remain-visible-only-on-the-non-personalized-front-page-no-name-parameter-present-and-must-not-appear-on-any-personalized-link-recipients-open",
+      "title": "On the main Valentine experience (non-tool route), hide the fixed-position CTA button with text \"Make your own 💗\" whenever the page is opened via a personalized/shareable link that includes the recipient-name personalization URL parameter (`name`). The CTA must remain visible only on the non-personalized front page (no `name` parameter present), and must not appear on any personalized link recipients open.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-trigger-an-additional-smile-upward-animation-effect-when-the-user-clicks-the-yes-of-course-button-on-the-valentine-card-without-removing-or-changing-the-existing-celebration-effects-e-g-hearts-burst-and-the-current-smiling-emoji-celebration-overlay",
+      "title": "Trigger an additional “smile upward” animation effect when the user clicks the \"Yes! Of course! 💕\" button on the Valentine card, without removing or changing the existing celebration effects (e.g., hearts burst and the current smiling-emoji celebration overlay).",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-fixed-main-valentine-experience-cta-button-text-from-make-your-own-to-exactly-make-your-own-while-keeping-its-navigation-behavior-and-conditional-visibility-rules-unchanged",
+      "title": "Update the fixed main Valentine experience CTA button text from \"Make your own 💗\" to exactly \"Make your own 🔗😁\" while keeping its navigation behavior and conditional visibility rules unchanged.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -316,6 +444,48 @@
     {
       "id": "AR-3",
       "summary": "Move the \"create link\" (wishlink generator) UI off the shareable Valentine page and into a separate dedicated page/route, so recipients only see the Valentine experience; keep all other visuals/behaviors unchanged.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Expose a generated \"special access link\" in the WishlinkToolPage UI with a copy-to-clipboard action so users can reliably open the tool route (including on Caffeine/base-path deployments).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add/update a main Valentine page CTA link with copy \"make your own 💗\" that, when clicked, automatically redirects the user to the wishlink tool page/route.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Ensure the floating hearts background animation is present/visible on the main/front Valentine page while keeping the rest of the experience unchanged.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Replace all occurrences of the default name text \"Radhika\" with \"Her Name\" across the entire site while keeping all other visuals/behaviors unchanged.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Hide the main Valentine page CTA \"Make your own 💗\" on user-created/shareable personalized Valentine links (e.g., when a `?name=` personalization parameter is present) so recipients only see the \"Will you be my Valentine\" experience; keep the CTA visible only on the default/front page.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Add a \"smile upward\" animation effect that triggers when the user clicks the \"Yes of course\" button during the acceptance/celebration flow.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Update the main Valentine page CTA button text from \"make your own 💗\" to exactly \"make your own 🔗😁\".",
       "reqIds": [],
       "status": "pending"
     }

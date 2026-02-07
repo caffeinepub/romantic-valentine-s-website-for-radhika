@@ -111,3 +111,33 @@ export function getMainExperienceBaseURL(): string {
   
   return origin + cleanPathname;
 }
+
+/**
+ * Builds a special access link URL for the tool page.
+ * This generates an absolute URL that:
+ * - Preserves any caffeineAdminToken hash fragment
+ * - Points to the /tool route
+ * - Excludes personalization query params (e.g., ?name=)
+ * - Respects the deployed base path
+ * 
+ * @returns Full absolute URL for accessing the tool page
+ */
+export function buildToolSpecialAccessLinkURL(): string {
+  const { origin, pathname, hash } = window.location;
+  
+  // Get the base origin + pathname (respects any deployed base path)
+  // Intentionally exclude search params (no ?name= etc.)
+  const baseURL = origin + pathname;
+  
+  // Check if there's a caffeineAdminToken in the current hash
+  const adminTokenMatch = hash.match(/#(caffeineAdminToken=[^/]+)/);
+  
+  if (adminTokenMatch) {
+    // Preserve the admin token and append /tool
+    const tokenPart = adminTokenMatch[1];
+    return `${baseURL}#${tokenPart}/tool`;
+  } else {
+    // No admin token, just use #/tool
+    return `${baseURL}#/tool`;
+  }
+}

@@ -1,6 +1,55 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Untitled request",
-  "requirements": []
+  "title": "Valentine celebration: add upward smile animation + update main CTA label",
+  "requirements": [
+    {
+      "id": "REQ-29",
+      "summary": "Add an additional upward-moving smile/emoji celebration animation on Yes-click while preserving existing heart burst and smiling overlay behaviors.",
+      "acceptanceCriteria": [
+        "When the \"Yes! Of course! 💕\" button is clicked, an upward-moving smile/emoji animation appears as part of the celebration.",
+        "The new upward smile animation does not block any clicks/taps (pointer-events remain disabled for the overlay).",
+        "The existing celebration visuals/animations (CelebrationHearts and current SmilingEmojiAnimation) continue to work as they do now.",
+        "The new animation auto-clears after it completes and does not keep accumulating DOM elements across repeated runs/reloads."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/UpwardSmileAnimation.tsx",
+          "operation": "create",
+          "description": "Create a new fixed, pointer-events-none overlay component that spawns multiple upward-moving smile/emoji particles (using the existing smiling emoji asset) and auto-clears its internal state after the animation duration to avoid DOM accumulation."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add a dedicated keyframes animation and utility class for the new upward smile effect (e.g., rising + slight drift/scale/fade) that can be applied by UpwardSmileAnimation."
+        },
+        {
+          "path": "frontend/src/components/SmilingEmojiAnimation.tsx",
+          "operation": "modify",
+          "description": "Extend the existing celebration overlay to support retriggering via an additional prop (e.g., a trigger key/run id) while keeping pointer-events-none and its current visuals/behavior unchanged; ensure it continues to auto-clear after completion."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the new UpwardSmileAnimation into the existing celebration stack so it triggers on the same Yes-click celebration event without removing CelebrationHearts or SmilingEmojiAnimation; introduce a lightweight celebration run id in App state (if needed) to support clean retriggers without accumulating elements."
+        }
+      ]
+    },
+    {
+      "id": "REQ-30",
+      "summary": "Update the fixed main Valentine CTA label to exactly \"Make your own 🔗😁\" without changing visibility rules or navigation behavior.",
+      "acceptanceCriteria": [
+        "On the non-tool, non-personalized main page (no recipient name parameter), the fixed CTA displays exactly: \"Make your own 🔗😁\".",
+        "On personalized links (when the recipient-name personalization URL parameter is present), the CTA remains hidden as it is currently.",
+        "Clicking/tapping the CTA still navigates to the Wishlink tool route exactly as it does now."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MakeYourOwnCTA.tsx",
+          "operation": "modify",
+          "description": "Change the rendered button text from \"Make your own 💗\" to exactly \"Make your own 🔗😁\" while keeping the existing click handler (navigateToTool) and component structure intact."
+        }
+      ]
+    }
+  ]
 }

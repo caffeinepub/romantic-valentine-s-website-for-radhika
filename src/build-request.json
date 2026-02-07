@@ -1,12 +1,68 @@
 {
   "kind": "build_request",
-  "title": "Untitled request",
+  "title": "Add upward smile animation on “Yes! Of course!” and update main CTA text",
   "priority": "normal",
-  "requirements": [],
-  "constraints": [],
-  "nonGoals": [],
+  "requirements": [
+    {
+      "id": "REQ-29",
+      "text": "Trigger an additional “smile upward” animation effect when the user clicks the \"Yes! Of course! 💕\" button on the Valentine card, without removing or changing the existing celebration effects (e.g., hearts burst and the current smiling-emoji celebration overlay).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Add some smile upward animations when she click on yes of course button"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the \"Yes! Of course! 💕\" button is clicked, an upward-moving smile/emoji animation appears as part of the celebration.",
+        "The new upward smile animation does not block any clicks/taps (pointer-events remain disabled for the overlay).",
+        "The existing celebration visuals/animations (CelebrationHearts and current SmilingEmojiAnimation) continue to work as they do now.",
+        "The new animation auto-clears after it completes and does not keep accumulating DOM elements across repeated runs/reloads."
+      ]
+    },
+    {
+      "id": "REQ-30",
+      "text": "Update the fixed main Valentine experience CTA button text from \"Make your own 💗\" to exactly \"Make your own 🔗😁\" while keeping its navigation behavior and conditional visibility rules unchanged.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "swap the text on button make your own 💗 to make your own 🔗😁"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the non-tool, non-personalized main page (no recipient name parameter), the fixed CTA displays exactly: \"Make your own 🔗😁\".",
+        "On personalized links (when the recipient-name personalization URL parameter is present), the CTA remains hidden as it is currently.",
+        "Clicking/tapping the CTA still navigates to the Wishlink tool route exactly as it does now."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutablePaths must not be modified (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+    "Do not change backend code; this request is frontend-only.",
+    "Do not change existing Valentine copy/flow/animations except for adding the new upward smile animation on Yes-click and changing the CTA label text."
+  ],
+  "nonGoals": [
+    "Redesigning the Valentine page layout, theming, or routing behavior.",
+    "Changing the personalized-link CTA hiding rules beyond the requested label change.",
+    "Adding new authentication, backend storage, or data models."
+  ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }
